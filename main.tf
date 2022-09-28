@@ -6,7 +6,7 @@ provider "aws" {
 }
 resource "aws_instance" "Docker-Swarm" {
   instance_type = "t2.micro"
-  count         = 3
+  count         = 4
   ami           = "ami-08d4ac5b634553e16"
   tags = {
     "Name" = "Node-${count.index}"
@@ -25,13 +25,13 @@ resource "aws_security_group" "DockerWebSG" {
     to_port     = 80
     protocol    = "tcp"
   }
-  #ingress {                     #Reglas de firewall de entrada
-  # cidr_blocks = ["0.0.0.0/0"] #Se aplicará a todas las direcciones
-  #description = "SG HTTP Visualizer"     #Descripción
-  #from_port   = 8080            #Del puerto
-  #to_port     = 8080            #Al puerto
-  #protocol    = "tcp"         #Protocolo
-  #}
+  ingress {                     #Reglas de firewall de entrada
+    cidr_blocks = ["0.0.0.0/0"] #Se aplicará a todas las direcciones
+    description = "SG HTTP Visualizer"     #Descripción
+    from_port   = 8080            #Del puerto
+    to_port     = 8080            #Al puerto
+    protocol    = "tcp"         #Protocolo
+  }
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
     description = "SG HTTPS"
@@ -40,12 +40,12 @@ resource "aws_security_group" "DockerWebSG" {
     protocol    = "tcp"
   }
   ingress {
-     cidr_blocks = ["172.31.84.207/32","172.31.89.119/32","172.31.84.218/32"] #AQUI CAMBIAR LAS IP DE CADA INSTANCIA
-     description = "SG Docker Swarm"      #Descripción
-     from_port   = 2377            #Del puerto
-     to_port     = 2377          #Al puerto
-     protocol    = "tcp"         #Protocolo
-   }
+    cidr_blocks = ["172.31.28.80/32", "172.31.91.120/32", "172.31.27.43/32","172.31.17.250/32"] #AQUI CAMBIAR LAS IP DE CADA INSTANCIA
+    description = "SG Docker Swarm"
+    from_port   = 2377
+    to_port     = 2377
+    protocol    = "tcp"
+  }
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
     description = "SG HTTP"
